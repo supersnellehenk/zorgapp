@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Patient Manager</title>
+</head>
+<body>
+<div align="center">
+    <h1>Patient List</h1>
+    <a href="/patients/new">Create New Patient</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Age</th>
+            <th>Weight</th>
+            <th>Length</th>
+            <th>Bmi</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="patient : ${listPatients}">
+            <td th:text="${patient.id}">Patient ID</td>
+            <td th:text="${patient.firstName}">First name</td>
+            <td th:text="${patient.lastName}">Last name</td>
+            <td th:text="${patient.age}">Age</td>
+            <td th:text="${patient.weight}">Weight</td>
+            <td th:text="${patient.length}">Length</td>
+            <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'POINT', 1, 'COMMA')}">Bmi</td>
+            <td>
+                <a th:href="@{'/patients/edit/' + ${patient.id}}">Edit</a>
+                &nbsp;&nbsp;&nbsp;
+                <a th:href="@{'/patients/delete/' + ${patient.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

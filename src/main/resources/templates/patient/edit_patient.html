@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Patient</title>
+</head>
+<body>
+<div align="center">
+    <h1>Edit Patient</h1>
+    <br />
+    <form action="#" th:action="@{/patients/save}" th:object="${patient}"
+          method="post">
+
+        <table border="0" cellpadding="10">
+            <input type="hidden" th:field="*{id}" />
+            <tr>
+                <td>First name:</td>
+                <td><input type="text" th:field="*{firstName}" /></td>
+            </tr>
+            <tr>
+                <td>Last name:</td>
+                <td><input type="text" th:field="*{lastName}" /></td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td><input type="number" th:field="*{age}" /></td>
+            </tr>
+            <tr>
+                <td>Weight (kg):</td>
+                <td><input type="number" th:field="*{weight}" /></td>
+            </tr>
+            <tr>
+                <td>Length (cm):</td>
+                <td><input type="number" th:field="*{length}" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
