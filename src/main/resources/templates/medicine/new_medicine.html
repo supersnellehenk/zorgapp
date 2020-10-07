@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Create New Medicine</title>
+</head>
+<body>
+<div align="center">
+    <h1>Create New Medicine</h1>
+    <br />
+    <form action="#" th:action="@{/medicines/save}" th:object="${medicine}"
+          method="post">
+
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" th:field="*{name}" /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><input type="text" th:field="*{description}" /></td>
+            </tr>
+            <tr>
+                <td>Kind:</td>
+                <td><input type="text" th:field="*{kind}" /></td>
+            </tr>
+            <tr>
+                <td>Dose:</td>
+                <td><input type="text" th:field="*{dose}" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

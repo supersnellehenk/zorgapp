@@ -1,28 +1,25 @@
 package adsd.semester1.zorgapp.controller;
 
-import adsd.semester1.zorgapp.exception.ResourceNotFoundException;
+import adsd.semester1.zorgapp.model.Medicine;
 import adsd.semester1.zorgapp.model.Patient;
 import adsd.semester1.zorgapp.repository.PatientRepository;
+import adsd.semester1.zorgapp.service.MedicineService;
 import adsd.semester1.zorgapp.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/patients")
 public class PatientController {
     @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
     private PatientService patientService;
+    @Autowired
+    private MedicineService medicineService;
 
     @RequestMapping(value = {"","/"})
     public String getAllPatients(Model model) {
@@ -33,7 +30,7 @@ public class PatientController {
     }
 
     @RequestMapping("/new")
-    public String showNewProductPage(Model model) {
+    public String showNewPatientPage(Model model) {
         Patient patient = new Patient();
         model.addAttribute("patient", patient);
 
@@ -41,69 +38,41 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveProduct(@ModelAttribute("patient") Patient patient) {
+    public String savePatient(@ModelAttribute("patient") Patient patient) {
         patientService.save(patient);
 
         return "redirect:/patients";
     }
 
-    @RequestMapping("/edit/{id}")
-    public ModelAndView showEditProductPage(@PathVariable(name = "id") int id) {
+    @RequestMapping("/{id}/edit")
+    public ModelAndView showEditPatientPage(@PathVariable(name = "id") long id) {
         ModelAndView mav = new ModelAndView("patient/edit_patient");
         Patient patient = patientService.get(id);
         mav.addObject("patient", patient);
-
+        List<Medicine> listMedicines = medicineService.listAll();
+        mav.addObject("listMedicines", listMedicines);
         return mav;
     }
 
-    @RequestMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable(name = "id") int id) {
+    @RequestMapping("/{id}/delete")
+    public String deletePatient(@PathVariable(name = "id") int id) {
             patientService.delete(id);
             return "redirect:/patients";
     }
 
-//    @GetMapping("/patients/{id}")
-//    public ResponseEntity < Patient > getPatientById(@PathVariable(value = "id") Long patientId)
-//            throws ResourceNotFoundException {
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Patient not found for this id :: " + patientId));
-//        return ResponseEntity.ok().body(patient);
-//    }
-//
-//    @GetMapping("patients/bmi/{id}")
-//    public ResponseEntity < Double > getPatientBmi(@PathVariable(value = "id") Long patientId)
-//            throws ResourceNotFoundException {
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Patient not found for this id :: " + patientId));
-//        return ResponseEntity.ok().body(patient.getBmi());
-//    }
-//
-//    @PostMapping("/patients")
-//    public Patient createPatient(@Valid @RequestBody Patient patient) {
-//        return patientRepository.save(patient);
-//    }
-//
-//    @PutMapping("/patients/{id}")
-//    public ResponseEntity < Patient > updatePatient(@PathVariable(value = "id") Long patientId,
-//                                                      @Valid @RequestBody Patient patientDetails) throws ResourceNotFoundException {
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Patient not found for this id :: " + patientId));
-//
-//        patient.setLastName(patientDetails.getLastName());
-//        patient.setFirstName(patientDetails.getFirstName());
-//        final Patient updatedPatient = patientRepository.save(patient);
-//        return ResponseEntity.ok(updatedPatient);
-//    }
-//
-//    @DeleteMapping("/patients/{id}")
-//    public Map < String, Boolean > deletePatient(@PathVariable(value = "id") Long patientId)
-//            throws ResourceNotFoundException {
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Patient not found for this id :: " + patientId));
-//
-//        patientRepository.delete(patient);
-//        Map < String, Boolean > response = new HashMap < > ();
-//        response.put("deleted", Boolean.TRUE);
-//        return response;
-//    }
+    @RequestMapping(value = "/{id}/medicines/new", method = RequestMethod.POST)
+    public String newMedicine(@PathVariable long id, @RequestParam int medicineId) {
+        Patient patient = patientService.get(id);
+        patient.addMedicine(medicineService.get(medicineId));
+        patientService.save(patient);
+        return "redirect:/patients/" + id + "/edit";
+    }
+
+    @RequestMapping("/{id}/medicines/{medicineId}/delete")
+    public String deleteMedicine(@PathVariable(name = "id") long id, @PathVariable(name = "medicineId") int medicineId) {
+        Patient patient = patientService.get(id);
+        patient.removeMedicine(medicineId);
+        patientService.save(patient);
+        return "redirect:/patients/" + id + "/edit";
+    }
 }

@@ -31,11 +31,11 @@
             <td th:text="${patient.age}">Age</td>
             <td th:text="${patient.weight}">Weight</td>
             <td th:text="${patient.length}">Length</td>
-            <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'POINT', 1, 'COMMA')}">Bmi</td>
+            <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'COMMA', 1, 'POINT')}">Bmi</td>
             <td>
-                <a th:href="@{'/patients/edit/' + ${patient.id}}">Edit</a>
+                <a th:href="@{'/patients/' + ${patient.id} + '/edit'}">Edit</a>
                 &nbsp;&nbsp;&nbsp;
-                <a th:href="@{'/patients/delete/' + ${patient.id}}">Delete</a>
+                <a th:href="@{'/patients/' + ${patient.id} + '/delete'}">Delete</a>
             </td>
         </tr>
         </tbody>

@@ -1,7 +1,7 @@
 package adsd.semester1.zorgapp.service;
 
-import adsd.semester1.zorgapp.model.Patient;
-import adsd.semester1.zorgapp.repository.PatientRepository;
+import adsd.semester1.zorgapp.model.Medicine;
+import adsd.semester1.zorgapp.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,20 +10,20 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PatientService {
+public class MedicineService {
 
     @Autowired
-    private PatientRepository repo;
+    private MedicineRepository repo;
 
-    public List<Patient> listAll() {
+    public List<Medicine> listAll() {
         return repo.findAll();
     }
 
-    public Patient save(Patient patient) {
-        return repo.save(patient);
+    public void save(Medicine medicine) {
+        repo.save(medicine);
     }
 
-    public Patient get(long id) {
+    public Medicine get(long id) {
         return repo.findById(id).get();
     }
 

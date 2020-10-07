@@ -1,95 +1,118 @@
 package adsd.semester1.zorgapp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "patients")
+@Table(name = "patient")
 public class Patient {
-    private long _id;
-    private String _firstName;
-    private String _lastName;
-    private int _age;
-    private double _weight;
-    private double _length;
-
-    public Patient() {
-
-    }
-
-    public Patient(String firstName, String lastName) {
-        _firstName = firstName;
-        _lastName = lastName;
-    }
-
-    public Patient(long id, String firstName, String lastName, int age, double weight, double length) {
-        _id = id;
-        _firstName = firstName;
-        _lastName = lastName;
-        _age = age;
-        _weight = weight;
-        _length = length;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return _id;
-    }
-    public void setId(long id) {
-        _id = id;
-    }
+    private long id;
 
     @Column(name = "first_name", nullable = false)
-    public String getFirstName() {
-        return _firstName;
-    }
-    public void setFirstName(String firstName) {
-        _firstName = firstName;
-    }
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    public String getLastName() {
-        return _lastName;
-    }
-    public void setLastName(String lastName) {
-        _lastName = lastName;
-    }
+    private String lastName;
 
     @Column(name = "age", nullable = true)
+    private int age;
+
+    @Column(name = "weight", nullable = true)
+    private double weight;
+
+//    @OneToMany(mappedBy="weight", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    private Set<Weight> weight;
+
+    @Column(name = "length", nullable = true)
+    private double length;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public int getAge() {
-        return _age;
+        return age;
     }
 
     public void setAge(int age) {
-        _age = age;
+        this.age = age;
     }
 
-    @Column(name = "weight", nullable = true)
+//    public Set<Weight> getWeight() {
+//        return weight;
+//    }
+//
+//    public void setWeight(Set<Weight> weight) {
+//        this.weight = weight;
+//    }
+
     public double getWeight() {
-        return _weight;
+        return weight;
     }
 
     public void setWeight(double weight) {
-        _weight = weight;
+        this.weight = weight;
     }
 
-    @Column(name = "length", nullable = true)
     public double getLength() {
-        return _length;
+        return length;
     }
 
     public void setLength(double length) {
-        _length = length;
+        this.length = length;
     }
 
     @Transient
     public double getBmi() {
-        return _weight / Math.pow((_length / 100.0), 2.0);
+        return getWeight() / Math.pow((length / 100.0), 2.0);
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            joinColumns = @JoinColumn(table = "patient", name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(table = "medicine", name = "medicine_id")
+    )
+    private Set<Medicine> medicines = new HashSet<>();
+
+    public Set<Medicine> getMedicines() {
+        return medicines;
+    }
+
+    public void addMedicine(Medicine medicine) {
+        medicines.add(medicine);
+        medicine.getPatients().add(this);
+    }
+
+    public void removeMedicine(int medicineId) {
+        var medicine = medicines.stream()
+                .filter(x -> x.getId() == medicineId).findFirst().orElse(null);
+        if (medicine != null) {
+            medicines.remove(medicine);
+            medicine.getPatients().remove(this);
+        }
     }
 }

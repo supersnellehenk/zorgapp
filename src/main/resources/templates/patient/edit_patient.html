@@ -2,43 +2,77 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Edit Patient</title>
 </head>
 <body>
 <div align="center">
     <h1>Edit Patient</h1>
-    <br />
+    <br/>
     <form action="#" th:action="@{/patients/save}" th:object="${patient}"
           method="post">
 
         <table border="0" cellpadding="10">
-            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{id}"/>
             <tr>
                 <td>First name:</td>
-                <td><input type="text" th:field="*{firstName}" /></td>
+                <td><input type="text" th:field="*{firstName}"/></td>
             </tr>
             <tr>
                 <td>Last name:</td>
-                <td><input type="text" th:field="*{lastName}" /></td>
+                <td><input type="text" th:field="*{lastName}"/></td>
             </tr>
             <tr>
                 <td>Age:</td>
-                <td><input type="number" th:field="*{age}" /></td>
+                <td><input type="number" th:field="*{age}"/></td>
             </tr>
             <tr>
                 <td>Weight (kg):</td>
-                <td><input type="number" th:field="*{weight}" /></td>
+                <td><input type="number" th:field="*{weight}"/></td>
             </tr>
             <tr>
                 <td>Length (cm):</td>
-                <td><input type="number" th:field="*{length}" /></td>
+                <td><input type="number" th:field="*{length}"/></td>
             </tr>
             <tr>
-                <td colspan="2"><button type="submit">Save</button> </td>
+                <td colspan="2">
+                    <button type="submit">Save</button>
+                </td>
             </tr>
         </table>
     </form>
+    <form action="#" th:action="@{/patients/__${patient.id}__/medicines/new}"
+          method="post">
+        <label for="medicineId">Medicijn toevoegen: </label>
+        <select id="medicineId" name="medicineId">
+            <option th:each="medicine : ${listMedicines}" th:value="${medicine.id}" th:text="${medicine.name}"></option>
+        </select>
+        <button type="submit">Save</button>
+    </form>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Medicine ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Kind</th>
+            <th>Dose</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="medicine : ${patient.getMedicines()}">
+            <td th:text="${medicine.id}">Patient ID</td>
+            <td th:text="${medicine.name}">Name</td>
+            <td th:text="${medicine.description}">Description</td>
+            <td th:text="${medicine.kind}">Kind</td>
+            <td th:text="${medicine.dose}">Dose</td>
+            <td>
+                <a th:href="@{'/patients/' + ${id} + '/medicines/' + ${medicine.id} + '/delete'}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

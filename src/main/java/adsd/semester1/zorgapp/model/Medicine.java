@@ -1,39 +1,74 @@
 package adsd.semester1.zorgapp.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "medicines")
+@Table(name = "medicine")
 public class Medicine {
-    private long _id;
-    private String _name;
-    private String _description;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long get_id() {
-        return _id;
-    }
-
-    public void set_id(long id) {
-        _id = id;
-    }
-
+    private long id;
     @Column(name = "name", nullable = false)
-    public String get_name() {
-        return _name;
-    }
-
-    public void set_name(String name) {
-        _name = name;
-    }
-
+    private String name;
     @Column(name = "description", nullable = false)
-    public String get_description() {
-        return _description;
+    private String description;
+    @Column(name = "kind", nullable = false)
+    private String kind;
+    @Column(name = "dose", nullable = false)
+    private String dose;
+
+//    public Medicine() {
+//    }
+//
+//    public Medicine(long id, String name, String description, String kind, String dose) {
+//        _id = id;
+//        _name = name;
+//        _description = description;
+//        _kind = kind;
+//        _dose = dose;
+//    }
+
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void set_description(String description) {
-        _description = description;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getDose() {
+        return dose;
+    }
+    public void setDose(String dose) {
+        this.dose = dose;
+    }
+
+    @ManyToMany(mappedBy = "medicines", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<Patient> patients = new HashSet<>();
+
+    public Set<Patient> getPatients() {
+        return patients;
     }
 }
