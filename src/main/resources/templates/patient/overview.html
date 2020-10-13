@@ -29,7 +29,7 @@
             <td th:text="${patient.firstName}">First name</td>
             <td th:text="${patient.lastName}">Last name</td>
             <td th:text="${patient.age}">Age</td>
-            <td th:text="${patient.weight}">Weight</td>
+            <td th:text="${patient.getLatestWeight()}">Weight</td>
             <td th:text="${patient.length}">Length</td>
             <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'COMMA', 1, 'POINT')}">Bmi</td>
             <td>

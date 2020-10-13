@@ -1,8 +1,16 @@
 package adsd.semester1.zorgapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "patient")
@@ -20,12 +28,6 @@ public class Patient {
 
     @Column(name = "age", nullable = true)
     private int age;
-
-    @Column(name = "weight", nullable = true)
-    private double weight;
-
-//    @OneToMany(mappedBy="weight", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-//    private Set<Weight> weight;
 
     @Column(name = "length", nullable = true)
     private double length;
@@ -62,22 +64,6 @@ public class Patient {
         this.age = age;
     }
 
-//    public Set<Weight> getWeight() {
-//        return weight;
-//    }
-//
-//    public void setWeight(Set<Weight> weight) {
-//        this.weight = weight;
-//    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
     public double getLength() {
         return length;
     }
@@ -88,7 +74,7 @@ public class Patient {
 
     @Transient
     public double getBmi() {
-        return getWeight() / Math.pow((length / 100.0), 2.0);
+        return getLatestWeight() / Math.pow((length / 100.0), 2.0);
     }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -114,5 +100,30 @@ public class Patient {
             medicines.remove(medicine);
             medicine.getPatients().remove(this);
         }
+    }
+
+    @OneToMany(mappedBy = "patient", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonManagedReference
+    private final Set<Weight> weights = new HashSet<>();
+
+    public Set<Weight> getWeights() {
+        return this.weights.stream().sorted(Comparator.comparing(Weight::getCreate_date).reversed()).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Transient
+    public double getLatestWeight() {
+        var weights = getWeights();
+        if (weights.isEmpty()) {
+            return -200.0;
+        }
+        return weights.stream().findFirst().get().getWeight();
+    }
+
+    @Transient
+    public String getWeightInJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        var weights = getWeights();
+        return objectMapper.writeValueAsString(weights);
     }
 }

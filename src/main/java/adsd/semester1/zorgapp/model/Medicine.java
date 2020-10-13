@@ -19,17 +19,6 @@ public class Medicine {
     @Column(name = "dose", nullable = false)
     private String dose;
 
-//    public Medicine() {
-//    }
-//
-//    public Medicine(long id, String name, String description, String kind, String dose) {
-//        _id = id;
-//        _name = name;
-//        _description = description;
-//        _kind = kind;
-//        _dose = dose;
-//    }
-
     public long getId() {
         return id;
     }

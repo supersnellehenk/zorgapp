@@ -27,10 +27,6 @@
                 <td><input type="number" th:field="*{age}"/></td>
             </tr>
             <tr>
-                <td>Weight (kg):</td>
-                <td><input type="number" th:field="*{weight}"/></td>
-            </tr>
-            <tr>
                 <td>Length (cm):</td>
                 <td><input type="number" th:field="*{length}"/></td>
             </tr>
@@ -62,17 +58,87 @@
         </thead>
         <tbody>
         <tr th:each="medicine : ${patient.getMedicines()}">
-            <td th:text="${medicine.id}">Patient ID</td>
-            <td th:text="${medicine.name}">Name</td>
-            <td th:text="${medicine.description}">Description</td>
-            <td th:text="${medicine.kind}">Kind</td>
-            <td th:text="${medicine.dose}">Dose</td>
+            <td th:text="${medicine.getId()}">Patient ID</td>
+            <td th:text="${medicine.getName()}">Name</td>
+            <td th:text="${medicine.getDescription()}">Description</td>
+            <td th:text="${medicine.getKind()}">Kind</td>
+            <td th:text="${medicine.getDose()}">Dose</td>
             <td>
                 <a th:href="@{'/patients/' + ${id} + '/medicines/' + ${medicine.id} + '/delete'}">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <form action="#" th:action="@{/patients/__${patient.id}__/weight/new}"
+          method="post">
+        <label for="weightId">Gewicht toevoegen: </label>
+        <input id="weightId" name="weightId" type="number"/>
+        <button type="submit">Save</button>
+    </form>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Weight</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="weight : ${patient.getWeights()}">
+            <td th:text="${weight.weight}">Patient ID</td>
+            <td th:text="${weight.getCreate_date()}">Name</td>
+        </tr>
+        </tbody>
+    </table>
+    <canvas id="weightChart" width="100" height="100" style="max-width: 500px !important; max-height: 500px !important;"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script defer th:inline="javascript">
+        var weightJson = /*[[${patient.getWeightInJson()}]]*/ "";
+        if (weightJson) {
+            weightJson = JSON.parse(weightJson).reverse();
+        }
+        console.log(weightJson);
+
+        var data = [];
+        var labels = [];
+
+        function addZeroBefore(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+
+        for (var i in weightJson) {
+            if (weightJson.hasOwnProperty(i)) {
+                var curr = weightJson[i];
+                data.push(curr.weight);
+                labels.push(`${addZeroBefore(curr.create_date.hour)}:${addZeroBefore(curr.create_date.minute)}:${addZeroBefore(curr.create_date.second)}` +
+                    ` ${curr.create_date.dayOfMonth}-${curr.create_date.monthValue}-${curr.create_date.year}`);
+            }
+        }
+
+        var ctx = document.getElementById('weightChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            responsive: true,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Weight',
+                    backgroundColor: '#ff0000',
+                    borderColor: '#ff0000',
+                    data: data,
+                    fill: false,
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

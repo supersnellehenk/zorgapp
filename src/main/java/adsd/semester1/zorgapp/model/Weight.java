@@ -1,9 +1,15 @@
 package adsd.semester1.zorgapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "weight")
@@ -14,15 +20,14 @@ public class Weight {
 
     @ManyToOne
     @JoinColumn(name="patient_id", nullable=false)
+    @JsonBackReference
     private Patient patient;
 
     @Column(name = "weight", nullable = false)
     private double weight;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
-    private Date create_date;
+    private LocalDateTime create_date;
 
     public long getId() {
         return id;
@@ -48,11 +53,18 @@ public class Weight {
         this.weight = weight;
     }
 
-    public Date getCreate_date() {
+    public LocalDateTime getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(Date create_date) {
+    public void setCreate_date(LocalDateTime create_date) {
         this.create_date = create_date;
     }
+
+//    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+//    private Set<Patient> patients = new HashSet<>();
+//
+//    public Set<Patient> getPatients() {
+//        return patients;
+//    }
 }
