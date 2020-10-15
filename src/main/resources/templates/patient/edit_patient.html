@@ -6,29 +6,30 @@
     <title>Edit Patient</title>
 </head>
 <body>
+<a href="/patients/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
 <div align="center">
     <h1>Edit Patient</h1>
     <br/>
-    <form action="#" th:action="@{/patients/save}" th:object="${patient}"
-          method="post">
+    <form action="#" method="post" th:action="@{/patients/save}"
+          th:object="${patient}">
 
         <table border="0" cellpadding="10">
-            <input type="hidden" th:field="*{id}"/>
+            <input th:field="*{id}" type="hidden"/>
             <tr>
                 <td>First name:</td>
-                <td><input type="text" th:field="*{firstName}"/></td>
+                <td><input th:field="*{firstName}" type="text"/></td>
             </tr>
             <tr>
                 <td>Last name:</td>
-                <td><input type="text" th:field="*{lastName}"/></td>
+                <td><input th:field="*{lastName}" type="text"/></td>
             </tr>
             <tr>
                 <td>Age:</td>
-                <td><input type="number" th:field="*{age}"/></td>
+                <td><input th:field="*{age}" type="number"/></td>
             </tr>
             <tr>
                 <td>Length (cm):</td>
-                <td><input type="number" th:field="*{length}"/></td>
+                <td><input th:field="*{length}" type="number"/></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -37,11 +38,11 @@
             </tr>
         </table>
     </form>
-    <form action="#" th:action="@{/patients/__${patient.id}__/medicines/new}"
-          method="post">
+    <form action="#" method="post"
+          th:action="@{/patients/__${patient.id}__/medicines/new}">
         <label for="medicineId">Medicijn toevoegen: </label>
         <select id="medicineId" name="medicineId">
-            <option th:each="medicine : ${listMedicines}" th:value="${medicine.id}" th:text="${medicine.name}"></option>
+            <option th:each="medicine : ${listMedicines}" th:text="${medicine.name}" th:value="${medicine.id}"></option>
         </select>
         <button type="submit">Save</button>
     </form>
@@ -69,8 +70,8 @@
         </tr>
         </tbody>
     </table>
-    <form action="#" th:action="@{/patients/__${patient.id}__/weight/new}"
-          method="post">
+    <form action="#" method="post"
+          th:action="@{/patients/__${patient.id}__/weight/new}">
         <label for="weightId">Gewicht toevoegen: </label>
         <input id="weightId" name="weightId" type="number"/>
         <button type="submit">Save</button>
@@ -80,16 +81,21 @@
         <tr>
             <th>Weight</th>
             <th>Date</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="weight : ${patient.getWeights()}">
             <td th:text="${weight.weight}">Patient ID</td>
             <td th:text="${weight.getCreate_date()}">Name</td>
+            <td>
+                <a th:href="@{'/patients/' + ${id} + '/weights/' + ${weight.id} + '/delete'}">Delete</a>
+            </td>
         </tr>
         </tbody>
     </table>
-    <canvas id="weightChart" width="100" height="100" style="max-width: 500px !important; max-height: 500px !important;"></canvas>
+    <canvas height="100" id="weightChart" style="max-width: 500px !important; max-height: 500px !important;"
+            width="100"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script defer th:inline="javascript">
         var weightJson = /*[[${patient.getWeightInJson()}]]*/ "";
@@ -139,6 +145,11 @@
             }
         });
     </script>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 </div>
 </body>
 </html>

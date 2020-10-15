@@ -2,39 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Edit Medicine</title>
 </head>
 <body>
+<a href="/medicines/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
 <div align="center">
     <h1>Edit Medicine</h1>
-    <br />
-    <form action="#" th:action="@{/medicines/save}" th:object="${medicine}"
-          method="post">
+    <br/>
+    <form action="#" method="post" th:action="@{/medicines/save}"
+          th:object="${medicine}">
 
         <table border="0" cellpadding="10">
-            <input type="hidden" th:field="*{id}" />
+            <input th:field="*{id}" type="hidden"/>
             <tr>
                 <td>Name:</td>
-                <td><input type="text" th:field="*{name}" /></td>
+                <td><input th:field="*{name}" type="text"/></td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td><input type="text" th:field="*{description}" /></td>
+                <td><input th:field="*{description}" type="text"/></td>
             </tr>
             <tr>
                 <td>Kind:</td>
-                <td><input type="text" th:field="*{kind}" /></td>
+                <td><input th:field="*{kind}" type="text"/></td>
             </tr>
             <tr>
                 <td>Dose:</td>
-                <td><input type="text" th:field="*{dose}" /></td>
+                <td><input th:field="*{dose}" type="text"/></td>
             </tr>
             <tr>
-                <td colspan="2"><button type="submit">Save</button> </td>
+                <td colspan="2">
+                    <button type="submit">Save</button>
+                </td>
             </tr>
         </table>
     </form>
 </div>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" rel="stylesheet">
+<script crossorigin="anonymous"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

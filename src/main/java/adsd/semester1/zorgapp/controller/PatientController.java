@@ -3,7 +3,6 @@ package adsd.semester1.zorgapp.controller;
 import adsd.semester1.zorgapp.model.Medicine;
 import adsd.semester1.zorgapp.model.Patient;
 import adsd.semester1.zorgapp.model.Weight;
-import adsd.semester1.zorgapp.repository.PatientRepository;
 import adsd.semester1.zorgapp.service.MedicineService;
 import adsd.semester1.zorgapp.service.PatientService;
 import adsd.semester1.zorgapp.service.WeightService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/patients")
@@ -87,6 +85,14 @@ public class PatientController {
         weight.setWeight(weightId);
         weight.setPatient(patient);
         weightService.save(weight);
+        return "redirect:/patients/" + id + "/edit";
+    }
+
+    @RequestMapping("/{id}/weights/{weightId}/delete")
+    public String deleteWeight(@PathVariable(name = "id") long id, @PathVariable(name = "weightId") int weightId) {
+        Patient patient = patientService.get(id);
+        patient.removeWeight(weightId);
+        weightService.delete(weightId);
         return "redirect:/patients/" + id + "/edit";
     }
 }

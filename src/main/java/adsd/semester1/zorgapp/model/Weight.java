@@ -1,15 +1,10 @@
 package adsd.semester1.zorgapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "weight")
@@ -19,7 +14,7 @@ public class Weight {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="patient_id", nullable=false)
+    @JoinColumn(name = "patient_id", nullable = false)
     @JsonBackReference
     private Patient patient;
 

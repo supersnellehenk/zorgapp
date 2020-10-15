@@ -18,10 +18,13 @@ public class Medicine {
     private String kind;
     @Column(name = "dose", nullable = false)
     private String dose;
+    @ManyToMany(mappedBy = "medicines", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<Patient> patients = new HashSet<>();
 
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -29,6 +32,7 @@ public class Medicine {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -36,6 +40,7 @@ public class Medicine {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -43,6 +48,7 @@ public class Medicine {
     public String getKind() {
         return kind;
     }
+
     public void setKind(String kind) {
         this.kind = kind;
     }
@@ -50,12 +56,10 @@ public class Medicine {
     public String getDose() {
         return dose;
     }
+
     public void setDose(String dose) {
         this.dose = dose;
     }
-
-    @ManyToMany(mappedBy = "medicines", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<Patient> patients = new HashSet<>();
 
     public Set<Patient> getPatients() {
         return patients;

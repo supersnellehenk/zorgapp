@@ -22,7 +22,7 @@ public class MedicineController {
     @Autowired
     private MedicineService medicineService;
 
-    @RequestMapping(value = {"","/"})
+    @RequestMapping(value = {"", "/"})
     public String getAllMedicines(Model model) {
         List<Medicine> listMedicines = medicineService.listAll();
         model.addAttribute("listMedicines", listMedicines);
@@ -56,7 +56,7 @@ public class MedicineController {
 
     @RequestMapping("/delete/{id}")
     public String deleteMedicine(@PathVariable(name = "id") int id) {
-            medicineService.delete(id);
-            return "redirect:/medicines";
+        medicineService.delete(id);
+        return "redirect:/medicines";
     }
 }
