@@ -79,7 +79,7 @@
     <table border="1" cellpadding="10">
         <thead>
         <tr>
-            <th>Weight</th>
+            <th>Weight (kg)</th>
             <th>Date</th>
             <th>Delete</th>
         </tr>
@@ -127,7 +127,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Weight',
+                    label: 'Gewicht (kg)',
                     backgroundColor: '#ff0000',
                     borderColor: '#ff0000',
                     data: data,
@@ -139,6 +139,16 @@
                     yAxes: [{
                         ticks: {
                             beginAtZero: false
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Gewicht (kg)'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Tijd en datum'
                         }
                     }]
                 }
