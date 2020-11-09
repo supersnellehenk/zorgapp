@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/patients")
@@ -41,8 +42,12 @@ public class PatientController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String savePatient(@ModelAttribute("patient") Patient patient) {
+        if (patient.getId() != 0) {
+            Patient tempPatient = patientService.get(patient.getId());
+            patient.setWeights(tempPatient.getWeights());
+            patient.setMedicines(tempPatient.getMedicines());
+        }
         patientService.save(patient);
-
         return "redirect:/patients";
     }
 
@@ -52,6 +57,7 @@ public class PatientController {
         Patient patient = patientService.get(id);
         mav.addObject("patient", patient);
         List<Medicine> listMedicines = medicineService.listAll();
+        listMedicines.removeAll(patient.getMedicines());
         mav.addObject("listMedicines", listMedicines);
         return mav;
     }
@@ -94,5 +100,12 @@ public class PatientController {
         patient.removeWeight(weightId);
         weightService.delete(weightId);
         return "redirect:/patients/" + id + "/edit";
+    }
+
+    @RequestMapping("/localeTester")
+    @ResponseBody
+    public String handleRequest (Locale locale) {
+        return String.format("Request received. Language: %s, Country: %s %n",
+                locale.getLanguage(), locale.getDisplayCountry());
     }
 }

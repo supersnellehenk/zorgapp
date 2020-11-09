@@ -3,40 +3,36 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Create New Patient</title>
+    <title th:text="#{patient.new}"></title>
 </head>
 <body>
-<a href="/patients/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
+<a href="/patients/" style="position: absolute; left: 10px; top: 10px;" th:text="#{nav.back}"></a>
 <div align="center">
-    <h1>Create New Patient</h1>
+    <h1 th:text="#{patient.new}"></h1>
     <br/>
     <form action="#" method="post" th:action="@{/patients/save}"
           th:object="${patient}">
 
         <table border="0" cellpadding="10">
             <tr>
-                <td>First name:</td>
+                <td  th:text="#{patient.firstName}+':'"></td>
                 <td><input th:field="*{firstName}" type="text"/></td>
             </tr>
             <tr>
-                <td>Last name:</td>
+                <td  th:text="#{patient.lastName}+':'"></td>
                 <td><input th:field="*{lastName}" type="text"/></td>
             </tr>
             <tr>
-                <td>Age:</td>
+                <td th:text="#{patient.age}+':'"></td>
                 <td><input th:field="*{age}" type="number"/></td>
             </tr>
             <tr>
-                <td>Weight (kg):</td>
-                <td><input th:field="*{weight}" type="number"/></td>
-            </tr>
-            <tr>
-                <td>Length (cm):</td>
+                <td th:text="#{patient.length}+':'"></td>
                 <td><input th:field="*{length}" type="number"/></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit">Save</button>
+                    <button type="submit" th:text="#{crud.save}"></button>
                 </td>
             </tr>
         </table>

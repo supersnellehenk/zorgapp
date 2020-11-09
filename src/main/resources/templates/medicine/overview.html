@@ -6,33 +6,33 @@
     <title>Medicine Manager</title>
 </head>
 <body>
-<a href="/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
+<a href="/" style="position: absolute; left: 10px; top: 10px;" th:text="#{nav.back}">Terug</a>
 <div align="center">
-    <h1>Medicine List</h1>
-    <a href="/medicines/new">Create New Medicine</a>
+    <h1 th:text="#{medicine.list}"></h1>
+    <a href="/medicines/new" th:text="#{medicine.new}"></a>
     <br/><br/>
     <table border="1" cellpadding="10">
         <thead>
         <tr>
-            <th>Medicine ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Kind</th>
-            <th>Dose</th>
-            <th>Actions</th>
+<!--            <th>Medicine ID</th>-->
+            <th th:text="#{medicine.name}"></th>
+            <th th:text="#{medicine.description}"></th>
+            <th th:text="#{medicine.kind}"></th>
+            <th th:text="#{medicine.dose}"></th>
+            <th th:text="#{patient.actions}"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="medicine : ${listMedicines}">
-            <td th:text="${medicine.id}">Patient ID</td>
-            <td th:text="${medicine.name}">Name</td>
-            <td th:text="${medicine.description}">Description</td>
-            <td th:text="${medicine.kind}">Kind</td>
-            <td th:text="${medicine.dose}">Dose</td>
+<!--            <td th:text="${medicine.id}">Patient ID</td>-->
+            <td th:text="${medicine.name}"></td>
+            <td th:text="${medicine.description}"></td>
+            <td th:text="${medicine.kind}"></td>
+            <td th:text="${medicine.dose}"></td>
             <td>
-                <a th:href="@{'/medicines/edit/' + ${medicine.id}}">Edit</a>
+                <a th:href="@{'/medicines/' + ${medicine.id}+'/edit'}" th:text="#{crud.edit}"></a>
                 &nbsp;&nbsp;&nbsp;
-                <a th:href="@{'/medicines/delete/' + ${medicine.id}}">Delete</a>
+                <a th:href="@{'/medicines/' + ${medicine.id}+'/delete'}" th:text="#{crud.delete}"></a>
             </td>
         </tr>
         </tbody>

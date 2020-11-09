@@ -3,12 +3,12 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Edit Medicine</title>
+    <title th:text="#{medicine.editTitle}"></title>
 </head>
 <body>
-<a href="/medicines/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
+<a href="/medicines/" style="position: absolute; left: 10px; top: 10px;" th:text="#{nav.back}"></a>
 <div align="center">
-    <h1>Edit Medicine</h1>
+    <h1 th:text="#{medicine.editTitle}"></h1>
     <br/>
     <form action="#" method="post" th:action="@{/medicines/save}"
           th:object="${medicine}">
@@ -16,24 +16,24 @@
         <table border="0" cellpadding="10">
             <input th:field="*{id}" type="hidden"/>
             <tr>
-                <td>Name:</td>
+                <td th:text="#{medicine.name}+':'"></td>
                 <td><input th:field="*{name}" type="text"/></td>
             </tr>
             <tr>
-                <td>Description:</td>
+                <td th:text="#{medicine.description}+':'"></td>
                 <td><input th:field="*{description}" type="text"/></td>
             </tr>
             <tr>
-                <td>Kind:</td>
+                <td th:text="#{medicine.kind}+':'"></td>
                 <td><input th:field="*{kind}" type="text"/></td>
             </tr>
             <tr>
-                <td>Dose:</td>
+                <td th:text="#{medicine.dose}+':'"></td>
                 <td><input th:field="*{dose}" type="text"/></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit">Save</button>
+                    <button type="submit" th:text="#{crud.save}"></button>
                 </td>
             </tr>
         </table>

@@ -45,7 +45,7 @@ public class MedicineController {
         return "redirect:/medicines";
     }
 
-    @RequestMapping("/edit/{id}")
+    @RequestMapping("/{id}/edit")
     public ModelAndView showEditMedicinePage(@PathVariable(name = "id") int id) {
         ModelAndView mav = new ModelAndView("medicine/edit_medicine");
         Medicine medicine = medicineService.get(id);
@@ -54,7 +54,7 @@ public class MedicineController {
         return mav;
     }
 
-    @RequestMapping("/delete/{id}")
+    @RequestMapping("/{id}/delete")
     public String deleteMedicine(@PathVariable(name = "id") int id) {
         medicineService.delete(id);
         return "redirect:/medicines";

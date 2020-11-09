@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <head>
     <meta charset="utf-8"/>
     <title>Patient Manager</title>
 </head>
 <body>
-<a href="/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
+<a href="/" style="position: absolute; left: 10px; top: 10px;" th:text="#{nav.back}"></a>
 <div align="center">
-    <h1>Patient List</h1>
-    <a href="/patients/new">Create New Patient</a>
+    <h1 th:text="#{patient.list}"></h1>
+    <a href="/patients/new" th:text="#{patient.new}"></a>
     <br/><br/>
     <table border="1" cellpadding="10">
         <thead>
         <tr>
-            <th>Patient ID</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Age</th>
-            <th>Weight</th>
-            <th>Length</th>
-            <th>Bmi</th>
-            <th>Actions</th>
+<!--            <th>Patient ID</th>-->
+            <th th:text="#{patient.firstName}"></th>
+            <th th:text="#{patient.lastName}"></th>
+            <th th:text="#{patient.age}"></th>
+            <th th:text="#{patient.weight}+' (kg)'"></th>
+            <th th:text="#{patient.length}+' (cm)'"></th>
+            <th th:text="#{patient.bmi}"></th>
+            <th th:text="#{patient.actions}"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="patient : ${listPatients}">
-            <td th:text="${patient.id}">Patient ID</td>
-            <td th:text="${patient.firstName}">First name</td>
-            <td th:text="${patient.lastName}">Last name</td>
-            <td th:text="${patient.age}">Age</td>
-            <td th:text="${patient.getLatestWeight()}">Weight</td>
-            <td th:text="${patient.length}">Length</td>
-            <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'COMMA', 1, 'POINT')}">Bmi</td>
+<!--            <td th:text="${patient.id}"></td>-->
+            <td th:text="${patient.firstName}"></td>
+            <td th:text="${patient.lastName}"></td>
+            <td th:text="${patient.age}"></td>
+            <td th:text="${#numbers.formatDecimal(patient.getLatestWeight(), 0, 'DEFAULT', 1, 'DEFAULT')}"></td>
+            <td th:text="${#numbers.formatDecimal(patient.length, 0, 'DEFAULT', 1, 'DEFAULT')}"></td>
+            <td th:text="${#numbers.formatDecimal(patient.getBmi(), 0, 'DEFAULT', 1, 'DEFAULT')}"></td>
             <td>
-                <a th:href="@{'/patients/' + ${patient.id} + '/edit'}">Edit</a>
-                &nbsp;&nbsp;&nbsp;
-                <a th:href="@{'/patients/' + ${patient.id} + '/delete'}">Delete</a>
+                <a th:href="@{'/patients/' + ${patient.id} + '/edit'}" th:text="#{crud.edit}"></a>
+                <a th:href="@{'/patients/' + ${patient.id} + '/delete'}" th:text="#{crud.delete}"></a>
             </td>
         </tr>
         </tbody>

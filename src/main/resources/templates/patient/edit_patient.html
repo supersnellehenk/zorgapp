@@ -3,12 +3,12 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Edit Patient</title>
+    <title th:text="#{patient.editTitle}"></title>
 </head>
 <body>
-<a href="/patients/" style="position: absolute; left: 10px; top: 10px;">Terug</a>
+<a href="/patients/" style="position: absolute; left: 10px; top: 10px;" th:text="#{nav.back}">Terug</a>
 <div align="center">
-    <h1>Edit Patient</h1>
+    <h1 th:text="#{patient.editTitle}"></h1>
     <br/>
     <form action="#" method="post" th:action="@{/patients/save}"
           th:object="${patient}">
@@ -16,80 +16,82 @@
         <table border="0" cellpadding="10">
             <input th:field="*{id}" type="hidden"/>
             <tr>
-                <td>First name:</td>
+                <td th:text="#{patient.firstName}+':'"></td>
                 <td><input th:field="*{firstName}" type="text"/></td>
             </tr>
             <tr>
-                <td>Last name:</td>
+                <td th:text="#{patient.lastName}+':'"></td>
                 <td><input th:field="*{lastName}" type="text"/></td>
             </tr>
             <tr>
-                <td>Age:</td>
+                <td th:text="#{patient.age}+':'"></td>
                 <td><input th:field="*{age}" type="number"/></td>
             </tr>
             <tr>
-                <td>Length (cm):</td>
-                <td><input th:field="*{length}" type="number"/></td>
+                <td th:text="#{patient.length}+' (cm):'"></td>
+                <td><input th:field="*{length}" type="number" step=".01"/></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit">Save</button>
+                    <button type="submit" th:text="#{crud.save}"></button>
                 </td>
             </tr>
         </table>
     </form>
     <form action="#" method="post"
           th:action="@{/patients/__${patient.id}__/medicines/new}">
-        <label for="medicineId">Medicijn toevoegen: </label>
+        <label for="medicineId" th:text="#{patient.addMedicine}+':'"></label>
         <select id="medicineId" name="medicineId">
             <option th:each="medicine : ${listMedicines}" th:text="${medicine.name}" th:value="${medicine.id}"></option>
         </select>
-        <button type="submit">Save</button>
+        <button type="submit" th:text="#{crud.save}">Save</button>
     </form>
     <table border="1" cellpadding="10">
         <thead>
         <tr>
-            <th>Medicine ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Kind</th>
-            <th>Dose</th>
-            <th>Actions</th>
+            <!--            <th>Medicine ID</th>-->
+            <th th:text="#{medicine.name}"></th>
+            <th th:text="#{medicine.description}"></th>
+            <th th:text="#{medicine.kind}"></th>
+            <th th:text="#{medicine.dose}"></th>
+            <th th:text="#{patient.actions}"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="medicine : ${patient.getMedicines()}">
-            <td th:text="${medicine.getId()}">Patient ID</td>
-            <td th:text="${medicine.getName()}">Name</td>
-            <td th:text="${medicine.getDescription()}">Description</td>
-            <td th:text="${medicine.getKind()}">Kind</td>
-            <td th:text="${medicine.getDose()}">Dose</td>
+            <!--            <td th:text="${medicine.getId()}"></td>-->
+            <td th:text="${medicine.getName()}"></td>
+            <td th:text="${medicine.getDescription()}"></td>
+            <td th:text="${medicine.getKind()}"></td>
+            <td th:text="${medicine.getDose()}"></td>
             <td>
-                <a th:href="@{'/patients/' + ${id} + '/medicines/' + ${medicine.id} + '/delete'}">Delete</a>
+                <a th:href="@{'/patients/' + ${id} + '/medicines/' + ${medicine.id} + '/delete'}"
+                   th:text="#{crud.delete}"></a>
             </td>
         </tr>
         </tbody>
     </table>
     <form action="#" method="post"
           th:action="@{/patients/__${patient.id}__/weight/new}">
-        <label for="weightId">Gewicht toevoegen: </label>
-        <input id="weightId" name="weightId" type="number"/>
-        <button type="submit">Save</button>
+        <label for="weightId" th:text="#{patient.addWeight}+':'"></label>
+        <input id="weightId" name="weightId" type="number" step=".1"/>
+        <button type="submit" th:text="#{crud.save}"></button>
     </form>
     <table border="1" cellpadding="10">
         <thead>
         <tr>
-            <th>Weight (kg)</th>
-            <th>Date</th>
-            <th>Delete</th>
+            <th th:text="#{patient.weight}+' (kg)'"></th>
+            <th th:text="#{patient.date}"></th>
+            <th th:text="#{patient.actions}"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="weight : ${patient.getWeights()}">
-            <td th:text="${weight.weight}">Patient ID</td>
-            <td th:text="${weight.getCreate_date()}">Name</td>
+            <td th:text="${#numbers.formatDecimal(weight.weight, 0, 'DEFAULT', 1, 'DEFAULT')}"></td>
+            <td th:text="${#temporals.format(weight.getCreate_date())}"></td>
             <td>
-                <a th:href="@{'/patients/' + ${id} + '/weights/' + ${weight.id} + '/delete'}">Delete</a>
+                <a th:href="@{'/patients/' + ${id} + '/weights/' + ${weight.id} + '/delete'}"
+                   th:text="#{crud.delete}"></a>
             </td>
         </tr>
         </tbody>
@@ -102,7 +104,6 @@
         if (weightJson) {
             weightJson = JSON.parse(weightJson).reverse();
         }
-        console.log(weightJson);
 
         var data = [];
         var labels = [];
@@ -120,6 +121,10 @@
             }
         }
 
+        var weightString = /*[[#{patient.weight}]]*/ "";
+        var dateString = /*[[#{patient.date}]]*/ "";
+        weightString += ' (kg)';
+
         var ctx = document.getElementById('weightChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -127,7 +132,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Gewicht (kg)',
+                    label: weightString,
                     backgroundColor: '#ff0000',
                     borderColor: '#ff0000',
                     data: data,
@@ -142,13 +147,13 @@
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Gewicht (kg)'
+                            labelString: weightString
                         }
                     }],
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Tijd en datum'
+                            labelString: dateString
                         }
                     }]
                 }
